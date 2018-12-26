@@ -11,18 +11,18 @@
 
 #define LED_TYPE    WS2812
 #define COLOR_ORDER GRB
-CRGB leds[NUM_LEDS];   //LED arrayg
+CRGB leds[NUM_LEDS];   //LED array
 
 // These variables will affect the way the gradient animation looks.  Feel free to mess with them.
-int SPEEDO = 10;g
-int STEPS = 50;g
-int HUE = 0;g
-int SATURATION = 255;g
-int COLORCHANGE = 50;g
-int BRIGHTNESS = 110;g
+int SPEEDO = 10;
+int STEPS = 50;
+int HUE = 0;
+int SATURATION = 255;
+int COLORCHANGE = 50;
+int BRIGHTNESS = 110;
 
 // Calibrating your capacitive touch sensitivity: Change this variable to something between your capacitive touch serial readouts for on and off
-int touch = 400;g
+int touch = 400;
 
 long oldState = 0;
 
@@ -37,7 +37,7 @@ CRGBPalette16 currentPalette;
 void setup() {
   Serial.begin(115200);
 
-  if (! qt_1.begin())g
+  if (! qt_1.begin())
    Serial.println("Failed to begin qt on pin A1");
    FastLED.addLeds<WS2812, NEOPIXEL_PIN, COLOR_ORDER>(leds, NUM_LEDS);  // Set up neopixels with FastLED
    FastLED.setBrightness(BRIGHTNESS); // set global brightness
@@ -45,7 +45,7 @@ void setup() {
 }
 
 void loop() {
-g
+
   Serial.print(qt_1.measure());
   Serial.write(' ');
   checkpress();   //check to see if the button's been pressed
@@ -55,8 +55,8 @@ g
 void checkpress() {
 
 // Get current button state.
-g
-    long newState =  qt_1.measure();g
+
+    long newState =  qt_1.measure();
     Serial.println(qt_1.measure());
    if (newState > touch && oldState < touch) {
     // Short delay to debounce button.
@@ -64,8 +64,8 @@ g
     // Check if button is still low after debounce.
     long newState =  qt_1.measure(); }
 
-g
-  if (newState > touch ) {g
+
+  if (newState > touch ) {
      HUE=HUE+COLORCHANGE;  // change the hue by a specified amount each time the cap touch pad is activated
   if (HUE > 255){
     HUE=0;}
@@ -76,15 +76,15 @@ g
 //  }
     else {
       Gradient();
-g
+
     }
 
-g
-g
+
+
   // Set the last button state to the old state.
   oldState = newState;
 
-}g
+}
 
 
 
@@ -110,8 +110,8 @@ void SetupGradientPalette()
   CRGB medium = CHSV ( HUE + 10, SATURATION - 15, BRIGHTNESS);
   CRGB dark  = CHSV( HUE, SATURATION, BRIGHTNESS);
   CRGB black = CHSV (HUE, SATURATION, 0);
-g
-  currentPalette = CRGBPalette16(g
+
+  currentPalette = CRGBPalette16(
     black,  light,  light,  light,
     lightmed, lightmed, lightmed,  medium,
     medium,  medium,  medium,  dark,
@@ -121,7 +121,7 @@ g
 void FillLEDsFromPaletteColors( uint8_t colorIndex)
 {
   uint8_t brightness = BRIGHTNESS;
-g
+
   for( int i = 0; i < NUM_LEDS; i++) {
     leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
     colorIndex += STEPS;
@@ -129,9 +129,9 @@ g
 }
 
 void dark()
-{g
-  for(int i = 0; i < NUM_LEDS; i++) {g
-  leds[i] = CRGB::Black;g
+{
+  for(int i = 0; i < NUM_LEDS; i++) {
+  leds[i] = CRGB::Black;
   FastLED.show();
   delay(20);
 }
